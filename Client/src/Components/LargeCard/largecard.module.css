@@ -1,0 +1,40 @@
+.card{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding:20px;
+    width: 99%;
+    min-height: 100%;
+    box-shadow: 0 6px 6px lightgray;
+}
+.details{
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    
+    font-size: 22px;
+    font-weight: 500;
+    min-height: 30px;
+    margin: 3px 0;
+}
+.date{
+    font-size: 14px;
+    opacity: 0.5;
+}
+.description p{
+    opacity: 0.7;
+}
+.user{
+    display: flex;
+    flex-direction: column;
+}
+.user span{
+    margin: 10px 0;
+}
+@media screen and (max-width:950px){
+    .card{
+        width: 100%;
+      
+    }
+}

@@ -1,0 +1,42 @@
+.card{
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    max-height:185px ;
+    padding: 20px;
+    
+    box-shadow: 0 3px 5px lightgray;
+}
+.card:hover{
+    border: solid 2px #0275d8;
+}
+.cardInfo{
+    display: flex;
+    flex-direction: column;
+     margin-bottom: 5px;
+    
+}
+.cardInfo div{
+    
+    max-height: 40px;
+    overflow: hidden;
+    white-space: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+}
+.title{
+    max-width:100px;
+    text-overflow: ellipsis;
+    font-size: 22px;
+    font-weight: 500;
+}
+.date{
+    font-size: 14px;
+    opacity: 0.5;
+}
+.users{
+    display: flex;
+    align-items: center;
+    overflow-x: scroll;
+    margin-top: 5px;
+} 
