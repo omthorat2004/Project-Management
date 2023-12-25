@@ -42,9 +42,9 @@ socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
     
     socket.on('send-comment', (data) => {
-        console.log(`Received comment from ${socket.id}: ${data}`);
+        console.log(`Received comment from ${socket.id}: ${data.comment}`);
         // Broadcast the received comment to all clients except the sender
-        socket.broadcast.emit('receive-comment', { user: socket.id, comment: data });
+        io.emit('receive-comment', { id:data.id,comment:data.comment });
       });
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');

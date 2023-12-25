@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import io from 'socket.io-client';
+import { AuthContext } from '../../Context/Context';
 import { usersSelector } from '../../Redux/usersSlice';
 import send from '../../assets/add_icon.svg';
 import Comment from '../Comment/Comment';
@@ -32,7 +32,8 @@ const Users = ()=>{
       )
 }
 const Comments = ()=>{
-   const [comment,setComment]=useState('')
+    const [comment,setComment]=useState('')
+    const {id} = useContext(AuthContext)
     const handleChange = (e)=>{
           setComment(e.target.value)
     }
@@ -40,11 +41,13 @@ const Comments = ()=>{
     const handleSubmit = (e)=>{
       e.preventDefault()
       console.log(comment)
-      socket.emit('send-comment',comment)
+      socket.emit('send-comment',{comment,id:id})
     }
     useEffect(()=>{
       socket.on('receive-comment',(data)=>{
-        console.log(data)
+        if(id==data.id){
+        alert("For this project only ",data.comment)
+        }
       })
       return () => {
         socket.off('receive-comment'); // Clean up event listener on unmount
