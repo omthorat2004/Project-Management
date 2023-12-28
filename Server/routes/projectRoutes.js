@@ -38,7 +38,7 @@ router.get("/project/:id",(req,res)=>{
 })
 router.get("/projectUserUrl",(req,res)=>{
     try{
-        pool.query("SELECT users.photoUrl,projectsTable.id FROM userProject INNER JOIN projectsTable ON userProject.projectId=projectsTable.id INNER JOIN users ON users.id=userProject.userId",(err,result)=>{
+        pool.query("SELECT users.photoUrl,projectsTable.id AS projectId,users.id AS userId FROM userProject INNER JOIN projectsTable ON userProject.projectId=projectsTable.id INNER JOIN users ON users.id=userProject.userId",(err,result)=>{
             if (err) throw err
             // console.log(result)
             

@@ -11,21 +11,22 @@ const exp = require('constants')
 const {pool,connectToDb} = require('./db/db')
 const userRouter = require('./routes/userRoutes')
 const projectRouter = require('./routes/projectRoutes.js')
+const commentRouter = require('./routes/commentRoutes.js')
 const {createUserTable} = require('./db/userTable')
 
 const {createUserProjectTable} = require('./db/userProjectTable')
 const {createProjectTable} = require('./db/projectTable')
+const createCommentTable = require('./db/commentTable.js')
 
 
 
-
-
-
+createCommentTable()
 
 app.use(express.json())
 app.use(cors())
 app.use('/',userRouter)
 app.use('/',projectRouter)
+app.use('/',commentRouter)
 
 connectToDb()
 // createUserTable()
@@ -44,7 +45,7 @@ socketIO.on('connection', (socket) => {
     socket.on('send-comment', (data) => {
         console.log(`Received comment from ${socket.id}: ${data.comment}`);
         // Broadcast the received comment to all clients except the sender
-        io.emit('receive-comment', { id:data.id,comment:data.comment });
+         socket.broadcast.emit('receive-comment', {...data});
       });
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');

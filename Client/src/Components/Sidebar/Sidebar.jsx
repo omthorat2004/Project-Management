@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
-import { AuthContext } from '../../Context/Context';
+import { currentUserSelector } from '../../Redux/authenticationSlice';
 import { usersSelector } from '../../Redux/usersSlice';
 import send from '../../assets/add_icon.svg';
 import Comment from '../Comment/Comment';
@@ -33,7 +34,8 @@ const Users = ()=>{
 }
 const Comments = ()=>{
     const [comment,setComment]=useState('')
-    const {id} = useContext(AuthContext)
+    const {id} = useParams()
+    const currentUser = useSelector(currentUserSelector)
     const handleChange = (e)=>{
           setComment(e.target.value)
     }
@@ -41,28 +43,26 @@ const Comments = ()=>{
     const handleSubmit = (e)=>{
       e.preventDefault()
       console.log(comment)
-      socket.emit('send-comment',{comment,id:id})
+      socket.emit('send-comment',{comment,projectId:id,userId:currentUser.id})
     }
     useEffect(()=>{
       socket.on('receive-comment',(data)=>{
-        if(id==data.id){
+        if(data.projectId===id){
         alert("For this project only ",data.comment)
         }
       })
       return () => {
         socket.off('receive-comment'); // Clean up event listener on unmount
       };
-    },[socket])
+    },[socket,id])
     
     return(
         <div className={style.comments}>
            <div className={style.first}>
              <Comment/>
-            <Comment/>
-            <Comment/>
-            <Comment/>
-            <Comment/>
-            <Comment/>
+             
+
+            
            </div>
            <div className={style.form}>
             <form onSubmit={handleSubmit}>
