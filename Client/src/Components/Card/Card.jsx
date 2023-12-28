@@ -10,6 +10,7 @@ const Card = ({title,dueDate,id}) => {
   // useEffect(()=>{
   //       setCurrent(urls.filter((obj)=>id==obj.id))
   // },[urls])
+  
   const handleClick = ()=>{
     navigate(`/project/${id}`)
   }

@@ -66,16 +66,17 @@ const Sign = () => {
     console.log(e.target.files[0])
     setFileUpload(e.target.files[0])
   }
-  if(error){
-    Swal.fire({
-      title:message,
-      icon:'warning'
-    })
-  }
-  if(success){
-    navigate('/')
-  }
+  
   useEffect(()=>{
+    if(error){
+      Swal.fire({
+        title:message,
+        icon:'warning'
+      })
+    }
+    if(success){
+      navigate('/')
+    }
     dispatch(setInitialState())
     setLoading(false)
   },[error,success])
