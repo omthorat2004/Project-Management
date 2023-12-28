@@ -157,7 +157,6 @@ const projectsSlice = createSlice({
         builder.addCase(getPhotoUrls.fulfilled,(state,action)=>{
             state.loading = false
             state.photoUrls = action.payload.result
-            
         })
 
 

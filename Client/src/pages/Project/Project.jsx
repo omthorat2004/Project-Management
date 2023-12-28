@@ -1,35 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import LargeCard from '../../Components/LargeCard/LargeCard';
 import Sidebar from '../../Components/Sidebar/Sidebar';
-import { AuthContext } from '../../Context/Context';
-import { currentProjectUsersSelector, projectsSelector } from '../../Redux/projectsSlice';
-import { usersSelector } from '../../Redux/usersSlice';
+import { errorSelector, getComments, loadingSelector, messageSelector, setInitialValue } from '../../Redux/commentSlice';
+import { projectsSelector } from '../../Redux/projectsSlice';
 import style from './project.module.css';
 const Project = () => {
-  const {setId} = useContext(AuthContext)
-  const users = useSelector(usersSelector)
-  const projectUsers = useSelector(currentProjectUsersSelector)
- 
-  let {id} = useParams()
-  id = Number(id)
+  const loading = useSelector(loadingSelector)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const error = useSelector(errorSelector)
+  const message = useSelector(messageSelector)
   const [project,setProject]= useState(null)
   const projects = useSelector(projectsSelector)
+  let {id} = useParams()
+  id=Number(id)
   //  console.log(projectUsers)
   // console.log(users)
-  
   useEffect(()=>{
     setProject(projects.find((ele)=>ele.id===id))
-    setId(id)
+    dispatch(getComments({id:id}))
   },[id,projects])
   // console.log(usersPhoto)
- 
+  useEffect(()=>{
+    if(error){
+    Swal.fire({
+      title:"Server Error",
+      icon:"error"
+    })
+    dispatch(setInitialValue())
+    navigate('/')
+  }
+  },[error,navigate,dispatch])
   return (
     <div className={style.container}>
       <div className={style.left}>
         <LargeCard {...project}  />
-
       </div>
       <div className={style.right}>
         <Sidebar />

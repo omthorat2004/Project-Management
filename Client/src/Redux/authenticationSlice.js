@@ -82,13 +82,12 @@ const authenticationSlice = createSlice({
             localStorage.removeItem('currentUser')
             state.currentUser=null
             state.token=null
-            state.userValid=true
+            state.userValid=false
         },
         setInitialState:(state,action)=>{
             state.loading=false
             state.error=false
             state.message=''
-            
             state.success=false
         }
     },

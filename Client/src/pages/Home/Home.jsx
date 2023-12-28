@@ -15,7 +15,7 @@ const Home = () => {
   const projects = useSelector(projectsSelector)
   const error = useSelector(errorSelector)
   const message = useSelector(messageSelector)
-  
+  console.log(projects)
   
   
    

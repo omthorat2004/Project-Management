@@ -81,7 +81,7 @@ const Form = () => {
   }, [error, message, dispatch,success]);
   useEffect(()=>{
   setPickerItems((prev)=>{
-    return users.map((obj)=>{
+    return users.filter((obj)=>obj.id!==currentUser.id).map((obj)=>{
       return {value:obj.id,label:obj.name}
     })
    

@@ -4,7 +4,7 @@ const router = require('express').Router()
 router.post('/createComment',(req,res)=>{
     const {projectId,userId,comment} = req.body
 
-    pool.query("INSERT INTO comments (projectId,userId,comment) VALUES (?,?,?) ",[projectId,userId,comment],(err,result)=>{
+    pool.query("INSERT INTO commentsData (projectId,userId,comment) VALUES (?,?,?) ",[projectId,userId,comment],(err,result)=>{
         if (err) {
             return res.json({error:"Failed to create comment"})
         }
@@ -13,12 +13,16 @@ router.post('/createComment',(req,res)=>{
 })
 
 router.get("/getComments/:id",(req,res)=>{
-    const {id} = req.params
-
-    pool.query("SELECT userId,projectId,comment FROM comments WHERE projectId=?",[id],(err,result)=>{
+    let {id} = req.params
+    id=Number(id)
+    pool.query("SELECT users.photoUrl,users.name,projectsTable.id AS projectId,commentsData.comment,commentsData.id FROM users INNER JOIN commentsData ON commentsData.userID=users.id INNER JOIN projectsTable ON commentsData.projectID=projectsTable.id WHERE projectsTable.id=? ",[id],(err,result)=>{
         if (err) {
+            console.log(err)
+            
             return res.json({error:"Server Error"})
         }
+        console.log(result)
+        // console.log(result)
         res.json({result:result})
     })
 })

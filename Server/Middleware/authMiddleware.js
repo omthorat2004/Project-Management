@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 
 const userVerification = (req,res)=>{
     const token = req.headers.authentication
+    console.log(token)
     jwt.verify(token,process.env.JWT_KEY,(err,decode)=>{
         if(err){
             res.json({valid:false})

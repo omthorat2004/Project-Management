@@ -6,7 +6,7 @@ export const usePhotoUrls = (id)=>{
      const [photoUrls,setPhotoUrls] = useState([])
      
      useEffect(()=>{
-          const array = urls.filter((obj)=> obj.id===id)
+          const array = urls.filter((obj)=> obj.projectId===id)
           setPhotoUrls(array)
      },[id,urls])
      return [photoUrls]

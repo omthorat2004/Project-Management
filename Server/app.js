@@ -44,6 +44,7 @@ socketIO.on('connection', (socket) => {
     
     socket.on('send-comment', (data) => {
         console.log(`Received comment from ${socket.id}: ${data.comment}`);
+        console.log(data)
         // Broadcast the received comment to all clients except the sender
          socket.broadcast.emit('receive-comment', {...data});
       });
@@ -51,7 +52,7 @@ socketIO.on('connection', (socket) => {
       console.log('🔥: A user disconnected');
       socket.removeAllListeners('send-comment');
       socket.removeAllListeners('disconnect');
-      socketIO.removeAllListeners('connection');
+      
     });
 });
 

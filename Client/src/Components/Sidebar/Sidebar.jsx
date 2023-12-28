@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import { currentUserSelector } from '../../Redux/authenticationSlice';
+import { addComment, commentsSelector, createComment, setInitialValue } from '../../Redux/commentSlice';
 import { usersSelector } from '../../Redux/usersSlice';
 import send from '../../assets/add_icon.svg';
 import Comment from '../Comment/Comment';
@@ -27,42 +28,53 @@ const Users = ()=>{
                     </div>)
                     })
                 }
-               
             </div>
         </div>
       )
 }
 const Comments = ()=>{
     const [comment,setComment]=useState('')
-    const {id} = useParams()
+    const comments = useSelector(commentsSelector)
+    
+    // console.log(comments)
+    let {id} = useParams()
+    id=Number(id)
+    const dispatch = useDispatch()
     const currentUser = useSelector(currentUserSelector)
     const handleChange = (e)=>{
           setComment(e.target.value)
     }
-    
     const handleSubmit = (e)=>{
       e.preventDefault()
       console.log(comment)
-      socket.emit('send-comment',{comment,projectId:id,userId:currentUser.id})
+      const commentObject = {comment,projectId:id,photoUrl:currentUser.photoUrl,name:currentUser.name}
+      dispatch(addComment(commentObject))
+      dispatch(createComment({userId:currentUser.id,projectId:id,comment}))
+      socket.emit('send-comment',commentObject)
     }
     useEffect(()=>{
       socket.on('receive-comment',(data)=>{
-        if(data.projectId===id){
-        alert("For this project only ",data.comment)
+        if(data.projectId==id){
+          console.log(data)
+          dispatch(addComment(data))
         }
       })
       return () => {
         socket.off('receive-comment'); // Clean up event listener on unmount
       };
     },[socket,id])
-    
+    useEffect(()=>{
+      return ()=>{
+        dispatch(setInitialValue())
+      }
+    },[id])
+   
     return(
         <div className={style.comments}>
            <div className={style.first}>
-             <Comment/>
-             
-
-            
+             {comments.map((comment)=>{
+              return <Comment {...comment} key={comment.id}/>
+             })}
            </div>
            <div className={style.form}>
             <form onSubmit={handleSubmit}>
@@ -79,10 +91,9 @@ const Sidebar = () => {
 let children ;
 
 if(window.location.pathname==='/'){
-    
-    children=<Users />
+    children=<Users/>
 }else {
-    children=<Comments />
+    children=<Comments/>
 }
   return (
     <div className={style.container}>
