@@ -65,7 +65,7 @@ const commentSlice = createSlice({
           })
           .addCase(getComments.fulfilled,(state,action)=>{
             state.loading = false
-            console.log(action.payload)
+
             state.comments=action.payload.result
         })
           .addCase(getComments.rejected,(state,action)=>{

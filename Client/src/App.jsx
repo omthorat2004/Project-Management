@@ -6,7 +6,7 @@ import './App.css'
 import Navbar from './Components/Navbar/Navbar'
 import PrivateRoute from './PrivateRoute/PrivateRoute'
 import { currentUserSelector } from './Redux/authenticationSlice'
-import { getPhotoUrls, getProjects, projectsSelector } from './Redux/projectsSlice'
+import { getProjects, projectsSelector } from './Redux/projectsSlice'
 import { getUsers, loadingSelector } from './Redux/usersSlice'
 import Form from './pages/Form/Form'
 import Home from './pages/Home/Home'
@@ -21,7 +21,7 @@ function App() {
   useEffect(()=>{
         dispatch(getUsers())
         dispatch(getProjects())
-        dispatch(getPhotoUrls())
+     
   },[user])
   
 

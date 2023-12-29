@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePhotoUrls } from '../../hooks/usePhotoUrls';
 import style from './card.module.css';
-const Card = ({title,dueDate,id}) => {
+const Card = ({title,dueDate,id,urls}) => {
   const navigate = useNavigate()
   // const [currentProjectUrls,setCurrent] = useState()
   // const {urls} =useContext(AuthContext)
-  const [photoUrls] = usePhotoUrls(id)
+  // const [photoUrls] = usePhotoUrls(id)
   // useEffect(()=>{
   //       setCurrent(urls.filter((obj)=>id==obj.id))
   // },[urls])
-  
+  const [photoUrls,setPhotoUrls] = useState([])
   const handleClick = ()=>{
     navigate(`/project/${id}`)
   }
+  console.log(photoUrls)
+  useEffect(()=>{
+    setPhotoUrls(urls.split(', '))
+  },[id])
   return (
   
       <div className={style.card} onDoubleClick={handleClick}>
@@ -26,7 +29,7 @@ const Card = ({title,dueDate,id}) => {
         <hr/>
         <div className={style.users}>
             {photoUrls.map((obj)=>{
-              return <img src={obj.photoUrl} className='userProfile'/>
+              return <img src={obj} className='userProfile'/>
             })}
         </div>
       </div>

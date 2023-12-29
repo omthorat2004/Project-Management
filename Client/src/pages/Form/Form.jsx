@@ -81,8 +81,9 @@ const Form = () => {
   }, [error, message, dispatch,success]);
   useEffect(()=>{
   setPickerItems((prev)=>{
+    console.log(users)
     return users.filter((obj)=>obj.id!==currentUser.id).map((obj)=>{
-      return {value:obj.id,label:obj.name}
+      return {value:obj.id,label:obj.email,image:obj.photoUrl}
     })
    
   })
@@ -116,6 +117,7 @@ const Form = () => {
           onSelectedItemsChange={(changes) =>
             handleSelectedItemsChange(changes.selectedItems)
           }
+          
         />
       </Box>
     </ChakraProvider>

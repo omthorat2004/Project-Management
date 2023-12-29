@@ -10,12 +10,12 @@ const {userVerification} = require('../Middleware/authMiddleware')
 router.post("/sign",(req,res)=>{
     const {email,password,photoUrl,name} = req.body
     try{
-        pool.query("SELECT * FROM users WHERE email=?",[email],(err,result)=>{
+        pool.query("SELECT * FROM users WHERE email=?",[email],async(err,result)=>{
             if (err) throw err
             if(result[0]){
                 res.json({error:"User already exists"})
             }else{
-                bcrypt.hash(password,10).then((hash)=>{
+             await bcrypt.hash(password,10).then((hash)=>{
                     pool.query("INSERT INTO users (email,password,photoUrl,name) VALUES (?,?,?,?)",[email,hash,photoUrl,name],(err,result)=>{
                         if (err) throw err
                         const token = jwt.sign({id:result.insertId},process.env.JWT_KEY,{
@@ -35,14 +35,14 @@ router.post("/login",(req,res)=>{
     const {email,password}=req.body
     console.log(email)
     try{
-        pool.query("SELECT * FROM users WHERE email=?",[email],(err,result)=>{
+        pool.query("SELECT * FROM users WHERE email=?",[email],async(err,result)=>{
             if (err) throw err
             console.log(result[0])
             if(!result[0]){
                 return res.json({error:"User does not exist"})
             }else{
                 let user = result[0]
-                const authorised=bcrypt.compare(password,result[0].password)
+                const authorised=await bcrypt.compare(password,result[0].password)
                 if(authorised){
                     const token = jwt.sign({id:result.insertId},process.env.JWT_KEY,{
                         expiresIn:'3d'

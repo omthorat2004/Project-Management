@@ -76,6 +76,9 @@ const projectsSlice = createSlice({
             state.message=''
             state.success=false
         },
+        createProject:(state,action)=>{
+
+        },
         setPhotoUrls:(state,action)=>{
             // const {users} = action.payload
             // console.log(users)
@@ -101,8 +104,8 @@ const projectsSlice = createSlice({
                 state.error=true
                 state.message=action.payload.error
             }else{
-                console.log("projects",action.payload)
-                state.projects=action.payload.projects
+                console.log(action.payload.result)
+                state.projects=action.payload.result
             }
             state.loading=false
         })
