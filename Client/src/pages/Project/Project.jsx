@@ -18,16 +18,14 @@ const Project = () => {
   const projects = useSelector(projectsSelector)
   let {id} = useParams()
   id=Number(id)
-  //  console.log(projectUsers)
-  // console.log(users)
-  console.log(project)
-  console.log(projects)
+  
+  // console.log(project)
+  // console.log(projects)
   useEffect(()=>{
     setProject(projects.find((ele)=>ele.id===id))
     dispatch(getComments({id:id}))
   },[id,projects])
 
-  // console.log(usersPhoto)
   useEffect(()=>{
     if(error){
     Swal.fire({

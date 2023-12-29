@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const {userVerification} = require('../Middleware/authMiddleware')
 
+
+
+
+
 router.post("/sign",(req,res)=>{
     const {email,password,photoUrl,name} = req.body
     try{
@@ -44,7 +48,7 @@ router.post("/login",(req,res)=>{
                 let user = result[0]
                 const authorised=await bcrypt.compare(password,result[0].password)
                 if(authorised){
-                    const token = jwt.sign({id:result.insertId},process.env.JWT_KEY,{
+                    const token = jwt.sign({id:result.id},process.env.JWT_KEY,{
                         expiresIn:'3d'
                     })
                     res.json({user:{email:result[0].email,photoUrl:result[0].photoUrl,name:result[0].name,id:result[0].id},token:token})
@@ -59,9 +63,24 @@ router.post("/login",(req,res)=>{
 })
 
 router.post("/signGoogle",(req,res)=>{
-    const {email,password,photoUrl} = req.body
+    const {email,photoUrl,name} = req.body
+    
     pool.query("SELECT id,email,photoUrl,name FROM users WHERE email=?",[email],(err,result)=>{
-        
+        if(result[0]){
+            const {email,photoUrl,name,id} = result[0]
+            // user is in database
+            const token = jwt.sign({id:result.id},process.env.JWT_KEY,{
+                expiresIn:'3d'
+            })
+            res.json({user:{email,photoUrl,name,id},token:token})
+        }else{
+            pool.query("INSERT INTO users (email,name,photoUrl) VALUES (?,?,?)",[email,name,photoUrl],(err,result)=>{
+                const token = jwt.sign({id:result.insertId},process.env.JWT_KEY,{
+                    expiresIn:'3d'
+                })
+            res.json({user:{email,photoUrl,name,id:result.insertId},token:token})
+            })
+        }
     })
 
 

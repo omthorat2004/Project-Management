@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { currentUserSelector } from '../../Redux/authenticationSlice';
+import { deleteProject } from '../../Redux/projectsSlice';
 import style from './largecard.module.css';
+
 const LargeCard = ({assigner,description,dueDate,id,title,usersId,url}) => {
     const [isUserAssigned,setUserAssigned] = useState(false)
     const [photoUrls,setPhotoUrls] = useState([])
-    // const [photoUrls] = usePhotoUrls(id)
-    // console.log(photoUrls)
-    // const dispatch = useDispatch()
-    console.log(isUserAssigned)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    // console.log(isUserAssigned)
     const currentUser = useSelector(currentUserSelector)
     useEffect(()=>{
       const array = usersId.split(', ')
-      console.log(array)
+      // console.log(array)
       const user = array.find((obj)=> Number(obj)===currentUser.id)
-      console.log(user)
+      // console.log(user)
      if(user){
       setUserAssigned(true)
      }
@@ -32,7 +34,9 @@ const LargeCard = ({assigner,description,dueDate,id,title,usersId,url}) => {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
+          dispatch(deleteProject({id:id}))
           Swal.fire("Saved!", "", "success");
+          navigate('/')
         } else if (result.isDenied) {
           Swal.fire("Changes are not saved", "", "info");
         }

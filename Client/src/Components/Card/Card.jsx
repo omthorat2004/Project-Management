@@ -13,7 +13,7 @@ const Card = ({title,dueDate,id,urls}) => {
   const handleClick = ()=>{
     navigate(`/project/${id}`)
   }
-  console.log(photoUrls)
+  
   useEffect(()=>{
     setPhotoUrls(urls.split(', '))
   },[id])

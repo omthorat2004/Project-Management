@@ -12,7 +12,6 @@ export const useGoogle = (dispatch) => {
       console.log(result.user)
       const {displayName,email,photoURL}=result.user
       dispatch(signGoogle({name:displayName,email:email,photoUrl:photoURL}));
-
     } catch (error) {
       console.log(error);
       // Handle error if needed

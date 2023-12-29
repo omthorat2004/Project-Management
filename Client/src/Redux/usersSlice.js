@@ -44,7 +44,7 @@ const usersSlice = createSlice({
             }else{
                 state.users=action.payload.users
                 state.loading=false
-                console.log(state.users)
+                // console.log(state.users)
             }
         })
         builder.addCase(getUsers.rejected,(state,action)=>{

@@ -57,7 +57,7 @@ export const userVerification  = createAsyncThunk("userVerification",async(token
             }
         })
         const data = await response.json()
-        console.log(token)
+        // console.log(token)
         return data
        }catch(err){
         return rejectWithValue(err)
@@ -139,8 +139,11 @@ const authenticationSlice = createSlice({
         })
         builder.addCase(signGoogle.fulfilled,(state,action)=>{
             state.currentUser=action.payload.user
+            state.token = action.payload.token
             localStorage.setItem('token',action.payload.token)
             localStorage.setItem('currentUser',action.payload.user)
+            state.success=true
+            state.userValid=true
         })
         builder.addCase(signGoogle.rejected,(state,action)=>{
             state.error=true

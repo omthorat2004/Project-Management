@@ -9,7 +9,7 @@ export const getProjects = createAsyncThunk("getProjects",async ()=>{
 })
 
 export const deleteProject = createAsyncThunk("deleteProject",async(body)=>{
-    const response = await fetch(`http://localhost:3000/delete${body.id}`,{
+    const response = await fetch(`http://localhost:3000/delete/${body.id}`,{
         method:"DELETE",
         headers:{
             "Content-Type":"application/json"
@@ -60,40 +60,15 @@ const projectsSlice = createSlice({
         message:'',
         error:false,
         success:false,
-       
     },
     reducers:{
-        setCurrentProject:(state,action)=>{
-            const project = state.projects.find((obj)=> obj.id===action.payload.id)
-            state.currentProject = project
-        },
-        removeCurrentProject:(state,action)=>{
-            state.currentProject = {}
-        },
         setInitialState:(state,action)=>{
             state.error=false
             state.loading=false
             state.message=''
             state.success=false
         },
-        createProject:(state,action)=>{
-
-        },
-        setPhotoUrls:(state,action)=>{
-            // const {users} = action.payload
-            // console.log(users)
-            // // console.log(state.currentProjectUsers)
-            // const array = state.currentProjectUsers.map((obj)=>{
-            //     const foundUser = users.find((ele)=>ele.id===obj.userId)
-            //     if(foundUser){
-            //       return {url:foundUser.photoUrl}
-            //     }else{
-            //       return null
-            //     }
-            //    }).filter((obj)=> obj!==null)
-            //    state.photoUrls = array
-            //    console.log(array)
-        }
+       
     },
     extraReducers:(builder)=>{
         builder.addCase(getProjects.pending,(state,action)=>{
@@ -104,7 +79,7 @@ const projectsSlice = createSlice({
                 state.error=true
                 state.message=action.payload.error
             }else{
-                console.log(action.payload.result)
+                // console.log(action.payload.result)
                 state.projects=action.payload.result
             }
             state.loading=false
@@ -123,7 +98,8 @@ const projectsSlice = createSlice({
                 state.error=true
                 state.message=action.payload.error
             }else{
-                state.projects = state.projects.filter((obj)=> obj.id!==action.payload.id)
+                console.log(action.payload)
+                state.projects = state.projects.filter((obj)=> obj.id!==Number(action.payload.id))
                 // state.currentProject = {}
             }
             state.loading=false
